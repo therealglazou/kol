@@ -1,6 +1,6 @@
 # kol
 
-This is a pretty simple WebExtension for Google Chrome adding a strength indicator to all password fields. The indicator is based on [zxcvbn-pv](https://github.com/therealglazou/zxcvbn-pv), a rewrite and extension of the original Dropbox's [zxcvbn](https://github.com/dropbox/zxcvbn). Zxcvbn-pv is itself calling zxcvbn *and* Troy Hunt's [HaveIBeenPwned](https://haveibeenpwned.com/Passwords) Pwned Passwords API. Zxcvbn-pv is also a work of mine and retains the original zxcvbn's MIT License.
+This is a pretty simple WebExtension for Google Chrome adding a strength indicator to all password fields. The indicator is based on [zxcvbn-pv](https://github.com/therealglazou/zxcvbn-pv), a rewrite and extension of the original Dropbox's [zxcvbn](https://github.com/dropbox/zxcvbn) under MIT license. Zxcvbn-pv is itself calling zxcvbn *and* Troy Hunt's [HaveIBeenPwned](https://haveibeenpwned.com/Passwords) Pwned Passwords API.
 
 The code is released under [MPL 2.0](./LICENSE).
 
