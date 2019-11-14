@@ -1,0 +1,57 @@
+{
+  "manifest_version": 2,
+  "name": "Kol",
+  "version": "0.1",
+
+  "author": "Daniel Glazman",
+
+  "description": "Swiss knife for password fields",
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "/src/zxcvbn-pv/src/adjacency_graphs.js",
+      "/src/zxcvbn-pv/src/feedback.js",
+      "/src/zxcvbn-pv/src/frequency_lists.js",
+      "/src/zxcvbn-pv/src/haveibeenpwned.js",
+      "/src/zxcvbn-pv/src/locales.js",
+      "/src/zxcvbn-pv/src/matching.js",
+      "/src/zxcvbn-pv/src/scoring.js",
+      "/src/zxcvbn-pv/src/time_estimates.js",
+      "/src/zxcvbn-pv/src/zxcvbn.js",
+      "/src/background.js"
+    ]
+  },
+
+  "content_security_policy": "img-src 'self' 'unsafe-eval'; script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+  "browser_action": {
+    "default_icon": "/images/logo.png",
+    "default_title": "Kol 0.1"
+  },
+  "icons": {
+    "128": "/images/logo.png"
+  },
+  "incognito": "spanning",
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": [
+        "<all_urls>"
+      ],
+      "css": [
+        "/src/content.css"
+      ],
+      "js": [
+        "/src/content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    "/images/logo.png"
+  ],
+  "permissions": [
+    "activeTab",
+    "*://*/*",
+    "<all_urls>"
+  ]
+}

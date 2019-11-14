@@ -1,0 +1,21 @@
+{
+  "compromised": {
+    "message": "compromis",
+    "description": "Ce mot de passe est compromis d’après haveibeenpwned.com, il n'est pas sûr"
+  },
+
+  "veryWeak": {
+    "message": "très faible",
+    "description": "Ce mot de passe est si simple qu'il est risqué, ne l'utilisez pas'"
+  },
+
+  "weak": {
+    "message": "faible",
+    "description": "Ce mot de passe est trop facile, essayez d'en trouver un plus compliqué"
+  },
+
+  "good": {
+    "message": "bon",
+    "description": "Ce mot de passe est acceptable"
+  }
+}

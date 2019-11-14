@@ -1,0 +1,43 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Original code: Password Strength Indicator
+ * Original author: Daniel Glazman
+ */
+
+#StrengthIndicatorWarning {
+  all: initial;
+  position: absolute;
+  left: 0px;
+  height: 18px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  display: block;
+  z-index: 2147483647;
+  text-align: center;
+  font-family: sans-serif;
+  opacity: 0.8;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+#StrengthIndicatorWarning.hidden {
+  display: none;
+}
+
+#StrengthIndicatorWarning:not(.hidden)::before {
+  all: initial;
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/logo.png");
+  height: 12px;
+  width: 12px;
+  display: inline-block;
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+  content: " ";
+  margin-right: 1em;
+  margin-top: 2px;
+}
+

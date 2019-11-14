@@ -1,0 +1,21 @@
+{
+  "compromised": {
+    "message": "compromised",
+    "description": "This password or passphrase has been reported hacked by haveibeenpwned.com, it is not safe"
+  },
+
+  "veryWeak": {
+    "message": "very weak",
+    "description": "This password or passphrase is very weak, don't use it"
+  },
+
+  "weak": {
+    "message": "weak",
+    "description": "This password or passphrase is weak, prefer a stronger one"
+  },
+
+  "good": {
+    "message": "good",
+    "description": "The strength of this password or passphrase is acceptable"
+  }
+}
