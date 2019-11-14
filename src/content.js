@@ -27,7 +27,7 @@ class StrengthIndicatorContent {
       this.kGOOD
     ];
 
-    this.kSIC_ATTRIBUTE = "data-strength-indicator";
+    this.kKOL_ATTRIBUTE = "data-strength-indicator";
 
     this.inputTimeOut = null;
     this.currentInputElement = null;
@@ -68,13 +68,13 @@ class StrengthIndicatorContent {
 
     // iterate
     [...elements].forEach((aElement) => {
-      if (aElement.hasAttribute(this.kSIC_ATTRIBUTE)) {
+      if (aElement.hasAttribute(this.kKOL_ATTRIBUTE)) {
         // early way out if we already processed that element
         return;
       }
 
       // make sure we don't process that element twice
-      aElement.setAttribute(this.kSIC_ATTRIBUTE, true);
+      aElement.setAttribute(this.kKOL_ATTRIBUTE, true);
 
       // show our UI thingies again when a password field gains focus
       aElement.addEventListener("focus",  (aEvent) => { this.onFocus(aEvent); }, false);
