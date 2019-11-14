@@ -48,8 +48,8 @@ class KOZUtils {
 
     let pointContainer = document.elementFromPoint(elemCenter.x, elemCenter.y);
     do {
-        if (pointContainer === aElement)
-          return true;
+      if (pointContainer === aElement)
+        return true;
     } while (pointContainer = pointContainer.parentNode);
     return false;
   }
