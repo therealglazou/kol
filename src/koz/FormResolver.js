@@ -59,7 +59,7 @@ class FormResolver {
   resolve() {
     const inputElementsWithoutForm = [...document.querySelectorAll(this.kFORM_FIELDS_SELECTOR)]
       // keep only visible ones without a form
-      .filter(aInput => !aInput.form && Utils.isVisible(aInput))
+      .filter(aInput => !aInput.form && !aInput.pseudoForm && Utils.isVisible(aInput))
       // map to an array of elemen+boundingbox
       .map(aInput => {
         const position = aInput.getBoundingClientRect();
@@ -134,7 +134,12 @@ class FormResolver {
       }
 
       // get the deepest ancestor and call it a pseudo-form
-      formElements.push(ancestors[ancestors.length - 1]);
+      const pseudoForm = ancestors[ancestors.length - 1];
+      formElements.push(pseudoForm);
+      // keep track of it on the input elements
+      aBoundingBox.elements.forEach((aInfoSet) => {
+        aInfoSet.element.pseudoForm = pseudoForm;
+      });
     });
 
     return formElements;
