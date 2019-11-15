@@ -7,7 +7,7 @@
  */
 
 
-class KOZUtils {
+class Utils {
 
   static getRightBottomCornerPosition(aElement) {
     if (!(aElement instanceof Element))
