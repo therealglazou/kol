@@ -13,10 +13,6 @@ class FormResolver {
     this.kFORM_SELECTOR = "form";
     this.kPADDING = 150;
 
-    // the document direction will probably not change easily so we can
-    // consider it stable and store it
-    this.mDocumentDirection = window.getComputedStyle(document.body).direction;
-
     this.resolve();
   }
 
