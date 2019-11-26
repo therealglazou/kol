@@ -22,7 +22,7 @@ class Utils {
 
   static isVisible(aElement) {
     // Source: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
-    // warning, code there has a big bug ; the code below fixes it
+    // warning, original StackOverflow code has a big bug; the code below fixes it
 
     if (!(aElement instanceof Element))
       throw Error('isVisible: no element');
@@ -52,5 +52,15 @@ class Utils {
         return true;
     } while (pointContainer = pointContainer.parentNode);
     return false;
+  }
+
+  static buildEnumFromArray(aArray) {
+    if (!Array.isArray(aArray)) {
+      throw Error('buildEnumFromArray: argument is not an array');
+    }
+    return aArray.reduce((aAcc, aValue) => {
+      aAcc[aValue] = aValue.toUpperCase();
+      return aAcc;
+    }, {});
   }
 }
