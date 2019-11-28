@@ -232,8 +232,7 @@ class ContextScraper {
       ],
       startPatterns: [
         "ng-",
-        "data-sic",
-        "data-strength"
+        "data-kol"
       ],
       preserve: [
         "ng-class",
@@ -281,14 +280,19 @@ class ContextScraper {
     let rv = "";
 
     // care for the placeholder attribute
-    if (aElement.hasAttribute("placeholder")) {
+    if (aElement.hasAttribute("placeholder") && aElement.getAttribute("placeholder")) {
       // if we have a placeholder attribute, rely on it, and id/name
       // because other attributes could introduce some bias
-      rv = aElement.getAttribute("placeholder") + " "
-           + (aElement.id ? aElement.id + " " : "")
-           + (aElement.hasAttribute("name")
-              ? aElement.getAttribute("name")
-              : "");
+      rv = aElement.getAttribute("placeholder") + " ";
+      rv = rv.repeat(5);
+
+      if (aElement.id) {
+        rv + aElement + " ";
+      }
+
+      if (aElement.hasAttribute("name")) {
+        rv += aElement.getAttribute("name") + " ";
+      }
     }
     else {
       // no placeholder, let's look at all attributes
@@ -318,6 +322,9 @@ class ContextScraper {
 
         rv += value + " ";
       }
+
+      // then the label
+      rv += Utils.getMostProbableLabel(aElement).repeat(5);
     }
 
     // iterate through CharacterData nodes
@@ -341,15 +348,6 @@ class ContextScraper {
         // add text only if the enclosing element is visible
         rv += currentNode.data + " ";
       }
-    }
-
-    // look for a label element attached to the field
-    // TODO: add extra code to look for context when there is no explicit label field
-    if (aElement.hasAttribute("id") || aElement.hasAttribute("name")) {
-      const name = aElement.getAttribute("id") || aElement.getAttribute("name");
-      const label = document.querySelector("*[for='" + name + "']");
-      if (label)
-        rv += label.textContent;
     }
 
     // clean the string up and limit results to strings of a minimal given length
