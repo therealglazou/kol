@@ -58,9 +58,52 @@ class Utils {
     if (!Array.isArray(aArray)) {
       throw Error('buildEnumFromArray: argument is not an array');
     }
+
     return aArray.reduce((aAcc, aValue) => {
       aAcc[aValue] = aValue.toUpperCase();
       return aAcc;
     }, {});
+  }
+
+  static getMostProbableLabel(aInputElement) {
+    if (aInputElement.hasAttribute("id") || aInputElement.hasAttribute("name")) {
+      const name = aInputElement.getAttribute("id") || aInputElement.getAttribute("name");
+      const label = document.querySelector("*[for='" + name + "']");
+      if (label) {
+        return label.textContent;
+      }
+    }
+
+    const boundingRect = aInputElement.getBoundingClientRect();
+    const topCenter   = {
+        x: boundingRect.left + aInputElement.offsetWidth / 2,
+        y: boundingRect.top - 5
+    };
+    const leftCenter   = {
+      x: boundingRect.left - 5,
+      y: boundingRect.top + aInputElement.offsetHeight / 2
+    };
+    const leftCenterInside   = {
+      x: boundingRect.left + 20,
+      y: boundingRect.top + aInputElement.offsetHeight / 2
+    };
+
+    const leftCenterInsideElement = document.elementFromPoint(leftCenterInside.x, leftCenterInside.y);
+    if (leftCenterInsideElement) {
+      // material design case...
+      return leftCenterInsideElement.textContent.trim() + " ";
+    }
+
+    const beforeElement = document.elementFromPoint(leftCenter.x, leftCenter.y);
+    const aboveElement  = document.elementFromPoint(topCenter.x, topCenter.y);
+    let rv = "";
+    if (beforeElement) {
+      rv += beforeElement.textContent.trim() + " ";
+    }
+    if (aboveElement) {
+      rv += aboveElement.textContent.trim();
+    }
+
+    return rv;
   }
 }
