@@ -22,7 +22,6 @@ class Utils {
 
   static isVisible(aElement) {
     // Source: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
-    // warning, original StackOverflow code has a big bug; the code below fixes it
 
     if (!(aElement instanceof Element))
       throw Error('isVisible: no element');
@@ -101,7 +100,7 @@ class Utils {
       rv += beforeElement.textContent.trim() + " ";
     }
     if (aboveElement) {
-      rv += aboveElement.textContent.trim();
+      rv += aboveElement.textContent.trim() + " ";
     }
 
     return rv;
