@@ -200,4 +200,8 @@ class Iso639Helper {
       "zul": "zu", // Zulu
     };
   }
+
+  toIso639Dash2(aIso639Dash3Code) {
+    return this.codes[aIso639Dash3Code];
+  }
 }
