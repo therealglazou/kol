@@ -27,7 +27,7 @@ class StrengthIndicatorContent {
       this.kGOOD
     ];
 
-    this.kKOL_ATTRIBUTE = "data-strength-indicator";
+    this.kKOL_ATTRIBUTE = "data-kol-indicator";
 
     this.inputTimeOut = null;
     this.currentInputElement = null;
