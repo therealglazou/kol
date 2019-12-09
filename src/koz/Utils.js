@@ -11,7 +11,7 @@ class Utils {
 
   static getRightBottomCornerPosition(aElement) {
     if (!(aElement instanceof Element))
-      throw Error('getRightBottomCornerPosition: no element');
+      throw Error('Utils::getRightBottomCornerPosition: no element');
 
     const boundingRect = aElement.getBoundingClientRect();
     return {
@@ -24,7 +24,7 @@ class Utils {
     // Source: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
 
     if (!(aElement instanceof Element))
-      throw Error('isVisible: no element');
+      throw Error('Utils::isVisible: no element');
 
     const boundingRect = aElement.getBoundingClientRect();
     const style = window.getComputedStyle(aElement);
@@ -55,7 +55,7 @@ class Utils {
 
   static buildEnumFromArray(aArray) {
     if (!Array.isArray(aArray)) {
-      throw Error('buildEnumFromArray: argument is not an array');
+      throw Error('Utils::buildEnumFromArray: argument is not an array');
     }
 
     return aArray.reduce((aAcc, aValue) => {

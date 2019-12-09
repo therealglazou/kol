@@ -276,11 +276,13 @@ class ContextScraper {
    * Gather prose data about a given element. Outputs a string or a map
    * of weights
    */
-  aggregateContent(aElement, aMapOutput = false) {
+  aggregateContent(aElement, aMapOutput = false, aIsInputElement = true) {
     let rv = "";
 
     // care for the placeholder attribute
-    if (aElement.hasAttribute("placeholder") && aElement.getAttribute("placeholder")) {
+    if (aIsInputElement
+        && aElement.hasAttribute("placeholder")
+        && aElement.getAttribute("placeholder")) {
       // if we have a placeholder attribute, rely on it, and id/name
       // because other attributes could introduce some bias
       rv = aElement.getAttribute("placeholder") + " ";
@@ -295,7 +297,7 @@ class ContextScraper {
       }
     }
     else {
-      // no placeholder, let's look at all attributes
+      // no placeholder or not an input element, let's look at all attributes
       const attributes = aElement.attributes;
       for (let i = 0; i < attributes.length; i++) {
         const name = attributes[i].name;
@@ -323,8 +325,11 @@ class ContextScraper {
         rv += value + " ";
       }
 
-      // then the label
-      rv += Utils.getMostProbableLabel(aElement).repeat(5);
+      // then the label or the document title
+      rv += ((aIsInputElement
+              ? Utils.getMostProbableLabel(aElement)
+              : document.title)
+             + " ").repeat(5);
     }
 
     // iterate through CharacterData nodes
