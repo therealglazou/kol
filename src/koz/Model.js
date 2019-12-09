@@ -25,6 +25,32 @@ class Model {
     this.model[aLocale] = Object.create(aLocale);
   }
 
+  loadLocale(aLocale){
+    if (!aLocale) {
+      throw Error('Model::loadLocale: empty locale');
+    }
+
+    let url =  chrome.extension.getURL("src/koz/model" + aLocale + ".json");
+
+    let self = this;
+    fetch(url, {mode:'same-origin'})
+    .then(function(aRes) {
+        return aRes.blob();
+    })
+    .then(function(aBlob) {
+        var reader = new FileReader();
+        reader.addEventListener("loadend", function() {
+          if (aCallback && typeof aCallback == "function") {
+            self.registerLocale(aLocale, JSON.parse(this.result));
+          }
+        });
+        reader.readAsText(aBlob);
+    })
+    .catch((aError) => {
+      console.log("Model::loadLocale: file load error: " + aError);
+    })
+  }
+
   setdefaultLocale(aLocale) {
     if (!aLocale) {
       throw Error('Model::setdefaultLocale: empty locale');
@@ -65,8 +91,9 @@ class Model {
     }
 
     let rv = {};
-    this.reverseModel(this.defaultLocale || "en", rv);
-    if (this.currentLocale && this.currentLocale != this.defaultLocale) {
+    const defaultLocale = this.defaultLocale || "en";
+    this.reverseModel(defaultLocale, rv);
+    if (this.currentLocale && this.currentLocale != defaultLocale) {
       this.reverseModel(this.currentLocale, rv);
     }
 
