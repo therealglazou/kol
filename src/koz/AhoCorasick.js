@@ -124,32 +124,6 @@ class AhoCorasick {
 
       frontLine.final = true;
     });
-
-    this.setBacklinkForNode(this.mTrie);
-  }
-
-  setBacklinkForNode(aNode) {
-    if (!aNode.value
-        || aNode.value.length == 1) {
-      aNode.backlink = aNode;
-    }
-    else {
-      let comparator = aNode.value;
-      let child = null;
-      do {
-        comparator = comparator.substring(1);
-        child = this.mTrie.find(comparator);
-      }
-      while (comparator && !child);
-
-      aNode.backlink = child ? child : this.mTrie;
-    }
-
-    if (aNode.childCount) {
-      aNode.children.forEach((aChildNode) => {
-        this.setBacklinkForNode(aChildNode);
-      });
-    }
   }
 
   search(aString, aAllowOverlaps = true) {
