@@ -54,6 +54,14 @@ class AhoCorasickTrieNode {
       throw Error("AhoCorasickTrieNode::addChild: invalid value");
     }
 
+    if (!aValue.startsWith(this.value)) {
+      throw Error("AhoCorasickTrieNode::addChild: unable to add child because value does not start with parent's value");
+    }
+
+    if (aValue.length != this.value.length + 1) {
+      throw Error("AhoCorasickTrieNode::addChild: value has wrong size");
+    }
+
     if (!this.mChildren) {
       this.mChildren = [];
     }
@@ -144,7 +152,7 @@ class AhoCorasick {
     }
   }
 
-  search(aString) {
+  search(aString, aAllowOverlaps = true) {
     const results = [];
 
     let states = [];
@@ -159,7 +167,11 @@ class AhoCorasick {
         if (child) {
           newStates.push(child);
           if (child.final) {
-            results.push( { needle: child.value, endOffset: i}) ;
+            results.push( {
+              needle: child.value,
+              startOffset: i - child.value.length + 1,
+              endOffset: i
+            }) ;
           }
         }
       });
@@ -167,6 +179,7 @@ class AhoCorasick {
     }
 
     results.sort((a, b) => {
+      // by decreasing length first
       if (a.needle.length > b.needle.length) {
         return -1;
       }
@@ -174,6 +187,7 @@ class AhoCorasick {
         return +1;
       }
 
+      // then increasing end offset
       if (a.endOffset > b.endOffset) {
         return +1;
       }
@@ -184,9 +198,23 @@ class AhoCorasick {
       return 0;
     });
 
-    results.forEach((aResult) => {
-      console.log("#### AhoCorasick: " + aResult.needle + " " + aResult.endOffset);
-    });
-    return results;
+    // return non overlapping largest results
+    return aAllowOverlaps
+           ? results
+           : results.reduce((aAcc, aResult) => {
+               if (!aAcc.length) {
+                 aAcc.push(aResult);
+               }
+               else {
+                 const intersecting = aAcc.some((aWord) => {
+                   return aResult.startOffset <= aWord.endOffset
+                          && aResult.endOffset >= aWord.startOffset;
+                 });
+                 if (!intersecting) {
+                   aAcc.push(aResult);
+                 }
+               }
+               return aAcc;
+             }, []);
   }
 }
