@@ -18,6 +18,12 @@ class AhoCorasickTrieNode {
     return this.mValue;
   }
 
+  get childCount() {
+    return this.mChildren
+           ? this.mChildren.length
+           : 0;
+  }
+
   hasChild(aValue) {
     if (!aValue) {
       throw Error("AhoCorasickTrieNode::hasChild: invalid value");
@@ -54,7 +60,7 @@ class AhoCorasickTrieNode {
 
   find(aValue) {
     if (this.value) {
-      throw Error("AhoCorasickTrieNode::find: origin is not the root of the trie");
+      throw Error("AhoCorasickTrieNode::find: context is not the root of the trie");
     }
 
     let comparator = "";
@@ -63,7 +69,7 @@ class AhoCorasickTrieNode {
       comparator += aValue[i];
       const child = frontLine.getChild(comparator);
       if (!child) {
-        return this;
+        break;
       }
 
       frontLine = child;
@@ -106,5 +112,43 @@ class AhoCorasick {
   }
 
   search(aString) {
+    const results = [];
+
+    let frontLine = this.mTrie;
+
+    let comparator = "";
+
+    for (let i = 0; i < aString.length; i++) {
+      comparator += aString[i];
+      const child = frontLine.getChild(comparator);
+
+      if (child) {
+        if (child.childCount) {
+          frontLine = child;
+        }
+        else {
+          results.push( {needle: comparator, endOffset: i} );
+          comparator = "";
+          frontLine = this.mTrie;
+        }
+      }
+      else {
+        // no match
+        if (comparator.length > 1) {
+          i += 1 - comparator.length;
+          comparator = comparator.substring(1);
+          frontLine = this.mTrie.find(comparator);
+          if (frontLine == this.mTrie) {
+            comparator = "";
+          }
+        }
+        else {
+          comparator = "";
+          frontLine = this.mTrie;
+        }
+      }
+    }
+
+    return results;
   }
 }
