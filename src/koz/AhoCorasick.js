@@ -12,10 +12,15 @@ class AhoCorasickTrieNode {
 
     this.mValue = aValue;
     this.mChildren = null;
+    this.final = false;
   }
 
   get value() {
     return this.mValue;
+  }
+
+  get children() {
+    return this.mChildren;
   }
 
   get childCount() {
@@ -69,7 +74,7 @@ class AhoCorasickTrieNode {
       comparator += aValue[i];
       const child = frontLine.getChild(comparator);
       if (!child) {
-        break;
+        return null;
       }
 
       frontLine = child;
@@ -108,47 +113,80 @@ class AhoCorasick {
           frontLine = this.mTrie.addChild(c);
         }
       }
+
+      frontLine.final = true;
     });
+
+    this.setBacklinkForNode(this.mTrie);
+  }
+
+  setBacklinkForNode(aNode) {
+    if (!aNode.value
+        || aNode.value.length == 1) {
+      aNode.backlink = aNode;
+    }
+    else {
+      let comparator = aNode.value;
+      let child = null;
+      do {
+        comparator = comparator.substring(1);
+        child = this.mTrie.find(comparator);
+      }
+      while (comparator && !child);
+
+      aNode.backlink = child ? child : this.mTrie;
+    }
+
+    if (aNode.childCount) {
+      aNode.children.forEach((aChildNode) => {
+        this.setBacklinkForNode(aChildNode);
+      });
+    }
   }
 
   search(aString) {
     const results = [];
 
-    let frontLine = this.mTrie;
-
-    let comparator = "";
-
+    let states = [];
     for (let i = 0; i < aString.length; i++) {
-      comparator += aString[i];
-      const child = frontLine.getChild(comparator);
+      let c = aString[i];
+      states.push( this.mTrie );
 
-      if (child) {
-        if (child.childCount) {
-          frontLine = child;
-        }
-        else {
-          results.push( {needle: comparator, endOffset: i} );
-          comparator = "";
-          frontLine = this.mTrie;
-        }
-      }
-      else {
-        // no match
-        if (comparator.length > 1) {
-          i += 1 - comparator.length;
-          comparator = comparator.substring(1);
-          frontLine = this.mTrie.find(comparator);
-          if (frontLine == this.mTrie) {
-            comparator = "";
+      const newStates = [];
+      states.forEach((aState) => {
+        const newValue = aState.value + c;
+        const child = aState.getChild(newValue);
+        if (child) {
+          newStates.push(child);
+          if (child.final) {
+            results.push( { needle: child.value, endOffset: i}) ;
           }
         }
-        else {
-          comparator = "";
-          frontLine = this.mTrie;
-        }
-      }
+      });
+      states = newStates;
     }
 
+    results.sort((a, b) => {
+      if (a.needle.length > b.needle.length) {
+        return -1;
+      }
+      if (a.needle.length < b.needle.length) {
+        return +1;
+      }
+
+      if (a.endOffset > b.endOffset) {
+        return +1;
+      }
+      if (a.endOffset < b.endOffset) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    results.forEach((aResult) => {
+      console.log("#### AhoCorasick: " + aResult.needle + " " + aResult.endOffset);
+    });
     return results;
   }
 }
